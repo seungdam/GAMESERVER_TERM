@@ -56,10 +56,13 @@ void OBDC_MGR::RetrieveResult()
     // 데이터베이스로 부터 값을 받아와 변수에 바인드
     // Bind columns 1, 2, and 3 
     if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO) {
-        retcode = SQLBindCol(hstmt, 1, SQL_C_LONG, &user_id, 4, &cb_id);
-        retcode = SQLBindCol(hstmt, 2, SQL_C_LONG, &user_x, 4, &cb_x);
-        retcode = SQLBindCol(hstmt, 3, SQL_C_LONG, &user_y, 4, &cb_y);
-        retcode = SQLBindCol(hstmt, 4, SQL_C_WCHAR, &user_name, 10, &cb_name);
+        retcode = SQLBindCol(hstmt, 1, SQL_C_WCHAR, &user_name, 10, &cb_name);
+        retcode = SQLBindCol(hstmt, 2, SQL_C_LONG, &user_lv, 4, &cb_id);
+        retcode = SQLBindCol(hstmt, 3, SQL_C_LONG, &user_x, 4, &cb_x);
+        retcode = SQLBindCol(hstmt, 4, SQL_C_LONG, &user_y, 4, &cb_y);
+        retcode = SQLBindCol(hstmt, 5, SQL_C_LONG, &user_max_hp, 4, &cb_x);
+        retcode = SQLBindCol(hstmt, 6, SQL_C_LONG, &user_hp, 4, &cb_y);
+       
         // 실제 데이터를 꺼낸다
         // Fetch and print each row of data. On an error, display a message and exit.  
         for (int i = 0; ; i++) {
@@ -68,7 +71,7 @@ void OBDC_MGR::RetrieveResult()
                 show_error(hstmt, SQL_HANDLE_STMT, retcode);
             if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
             {
-                wprintf(L"id:%3d %4d %4d %ls\n", user_id, user_x, user_y, user_name);
+                wprintf(L"id:%3d %4d %4d %ls\n", user_exp, user_x, user_y, user_name);
                 break;
             }
             else

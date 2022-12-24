@@ -172,6 +172,16 @@ protected:
 			m_objectmgr->RemoveObject(my_packet->id);
 		}
 		break;
+		case SC_EXP:
+		{
+			SC_EXP_PACKET* my_packet = reinterpret_cast<SC_EXP_PACKET*>(ptr);
+			m_objectmgr->AddEXP(m_id, my_packet->exp);
+			m_exp_bar.setSize(sf::Vector2f(m_objectmgr->GetObject(m_id).m_exp, 10));
+		}
+		case SC_LOGIN_FAIL:
+		{
+			m_window->close();
+		}
 		default:
 			printf("Unknown PACKET type [%d]\n", ptr[1]);
 		}

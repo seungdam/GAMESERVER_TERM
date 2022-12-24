@@ -1,6 +1,6 @@
 #include "Msession.h"
-
-
+#include "OBDC_MGR.h"
+#include <cstring>
 #pragma comment(lib, "WS2_32.lib")
 #pragma comment(lib, "MSWSock.lib")
 
@@ -48,30 +48,80 @@ int get_new_client_id()
     return -1;
 }
 
+void disconnect(int c_id)
+{
+    clients[c_id]._vl.lock();
+    unordered_set <int> vl = clients[c_id]._view_list;
+    clients[c_id]._vl.unlock();
+    for (auto& p_id : vl) {
+        if (is_npc(p_id)) continue;
+        auto& pl = clients[p_id];
+        {
+            lock_guard<mutex> ll(pl._s_lock);
+            if (ST_INGAME != pl._state) continue;
+        }
+        if (pl._id == c_id) continue;
+        pl.send_remove_object_packet(c_id);
+    }
+    closesocket(clients[c_id]._socket);
+
+    lock_guard<mutex> ll(clients[c_id]._s_lock);
+    clients[c_id]._state = ST_FREE;
+}
+
 void process_packet(int c_id, char* packet)
 {
     switch (packet[1]) {
     case CS_LOGIN: {
+        OBDC_MGR obdcmgr;
         CS_LOGIN_PACKET* p = reinterpret_cast<CS_LOGIN_PACKET*>(packet);
-        strcpy_s(clients[c_id]._name, p->name);
-        {
-            lock_guard<mutex> ll{ clients[c_id]._s_lock };
-            clients[c_id].x = rand() % W_WIDTH;
-            clients[c_id].y = rand() % W_HEIGHT;
-            clients[c_id]._state = ST_INGAME;
+        wstring exec = L"EXEC select_user_data ";
+        string s = "";
+        wstring ws = L"";
+        s.append(p->name);
+        ws.assign(s.begin(), s.end());
+        wprintf(ws.c_str());
+
+        exec.append(ws.c_str());
+        obdcmgr.AllocateHandles();
+        obdcmgr.ConnectDataSource(L"2022GAMESERVEROBDC");
+        obdcmgr.ExecuteStatementDirect(exec.c_str());
+        obdcmgr.RetrieveResult();
+
+        if (obdcmgr.user_lv == -1) {
+            SC_LOGIN_FAIL_PACKET fp;
+            fp.size = sizeof(SC_LOGIN_FAIL_PACKET);
+            fp.type = SC_LOGIN_FAIL;
+            clients[c_id].do_send(&fp);
+            break;
         }
-        clients[c_id].send_login_info_packet();
-        for (auto& pl : clients) {
+        else {
+            strcpy_s(clients[c_id]._name, p->name);
             {
-                lock_guard<mutex> ll(pl._s_lock);
-                if (ST_INGAME != pl._state) continue;
+                lock_guard<mutex> ll{ clients[c_id]._s_lock };
+                clients[c_id].x = obdcmgr.user_x;
+                clients[c_id].y = obdcmgr.user_y;
+                clients[c_id]._hp = obdcmgr.user_hp;
+                clients[c_id]._max_hp = obdcmgr.user_max_hp;
+                clients[c_id]._level = obdcmgr.user_lv;
+                clients[c_id]._exp = obdcmgr.user_exp;
+                clients[c_id]._state = ST_INGAME;
             }
-            if (pl._id == c_id) continue;
-            if (false == can_see(c_id, pl._id))
-                continue;
-            if (is_pc(pl._id)) pl.send_add_object_packet(c_id,clients);
-            clients[c_id].send_add_object_packet(pl._id,clients);
+
+            clients[c_id].send_login_info_packet();
+            for (auto& pl : clients) {
+                {
+                    lock_guard<mutex> ll(pl._s_lock);
+                    if (ST_INGAME != pl._state) continue;
+                }
+                if (pl._id == c_id) continue;
+                if (false == can_see(c_id, pl._id))
+                    continue;
+                if (is_pc(pl._id)) pl.send_add_object_packet(c_id, clients);
+                clients[c_id].send_add_object_packet(pl._id, clients);
+            }
         }
+        obdcmgr.DisconnectDataSource();
         break;
     }
     case CS_MOVE: {
@@ -133,39 +183,25 @@ void process_packet(int c_id, char* packet)
     case CS_ATTACK: {
         CS_ATTACK_PACKET* p = reinterpret_cast<CS_ATTACK_PACKET*>(packet);
         for (auto& i : clients[c_id]._view_list) {
-            if (can_dmg(c_id,i) && i < 10000) {
+            if (can_dmg(c_id,i) && i > 10000) {
                 clients[i]._hp -= 5;
-                std::cout << i << " 번 클라 데미지!" << std::endl;
+                std::cout << i << " NPC 데미지 " << std::endl;
                 if (clients[i]._hp < 0) {
                     clients[c_id]._exp += 10;
+                    SC_EXP_PACKET ep;
+                    ep.size = sizeof(SC_EXP_PACKET);
+                    ep.type = SC_EXP;
+                    ep.exp = 10;
+                    clients[c_id].do_send(&ep);
+                    clients[i]._hp = 100;
                 }
             }
         }
     }
-     
     }
 }
 
-void disconnect(int c_id)
-{
-    clients[c_id]._vl.lock();
-    unordered_set <int> vl = clients[c_id]._view_list;
-    clients[c_id]._vl.unlock();
-    for (auto& p_id : vl) {
-        if (is_npc(p_id)) continue;
-        auto& pl = clients[p_id];
-        {
-            lock_guard<mutex> ll(pl._s_lock);
-            if (ST_INGAME != pl._state) continue;
-        }
-        if (pl._id == c_id) continue;
-        pl.send_remove_object_packet(c_id);
-    }
-    closesocket(clients[c_id]._socket);
 
-    lock_guard<mutex> ll(clients[c_id]._s_lock);
-    clients[c_id]._state = ST_FREE;
-}
 
 
 void worker_thread(HANDLE h_iocp)
@@ -251,9 +287,10 @@ void InitializeNPC()
 {
     cout << "NPC intialize begin.\n";
     for (int i = MAX_USER; i < MAX_USER + MAX_NPC; ++i) {
-        clients[i].x = rand() % W_WIDTH;
+        clients[i].x = rand() % W_WIDTH + 500;
         clients[i].y = rand() % W_HEIGHT;
         clients[i]._id = i;
+        clients[i]._hp = 100;
         sprintf_s(clients[i]._name, "NPC%d", i);
         clients[i]._state = ST_INGAME;
        
@@ -294,5 +331,6 @@ int main()
     for (auto& th : worker_threads)
         th.join();
     closesocket(g_s_socket);
+   
     WSACleanup();
 }

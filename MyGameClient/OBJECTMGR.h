@@ -24,6 +24,7 @@ public:
 	void AddObject(int id, short x, short y , int max_hp, int hp,
 		int level, int exp, const char* name);
 	OBJECT& GetObject(int id) { return *m_pc_objects[id]; };
+	void AddEXP(int id, int exp) { m_pc_objects[id]->m_exp += exp; }
 	void RemoveObject(int id);
 	void Render(sf::RenderWindow& window);
 	void Move(int id, int x, int y);

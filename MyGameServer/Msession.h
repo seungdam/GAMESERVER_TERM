@@ -15,7 +15,7 @@ public:
     int _hp;
     int _exp;
     int _level;
-
+    
     SOCKET _socket;
     short   x, y;
     char   _name[NAME_SIZE];
