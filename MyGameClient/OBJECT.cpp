@@ -1,14 +1,14 @@
 #include "OBJECT.h"
-void OBJECT::show()
+void GameObject::show()
 {
 	m_showing = true;
 }
-void OBJECT::hide()
+void GameObject::hide()
 {
 	m_showing = false;
 }
 
-void OBJECT::a_move(int x, int y) {
+void GameObject::a_move(int x, int y) {
 	m_x = x;
 	m_y = y;
 	m_sprite.setPosition(x * 16, y * 16);
@@ -16,14 +16,14 @@ void OBJECT::a_move(int x, int y) {
 		, m_y * 16 - 15));
 }
 
-void OBJECT::a_draw(sf::RenderWindow& window) {
+void GameObject::a_draw(sf::RenderWindow& window) {
 	if (m_showing) {
 		window.draw(m_name);
 		window.draw(m_sprite);
 	}
 }
 
-void OBJECT::set_name(const char str[]) {
+void GameObject::set_name(const char str[]) {
 	std::string s = "";
 	s += str;
 	s += " LV";
