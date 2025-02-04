@@ -1,5 +1,5 @@
-#include "pch.h"
-#include "Singleton.h"
+#include "../Header/pch.h"
+#include "../Pattern/Singleton.h"
 
 #define WIN32_MEAN_AND_LEAN
 #include <Windows.h>

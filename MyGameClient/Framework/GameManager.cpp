@@ -1,5 +1,5 @@
-#include "pch.h"
-#include "Singleton.h"
+#include "../Header/pch.h"
+#include "../Pattern/Singleton.h"
 #include "InputManager.h"
 #include "EntityManager.h"
 #include "SceneManager.h"

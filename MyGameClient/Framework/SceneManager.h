@@ -7,7 +7,8 @@ struct SceneManagerDeleter
 	void operator()(CSceneManager*) {}
 };
 
-enum class GameScene { Title, Game, Menu };
+enum class SceneState { Title, Game, Menu };
+class CScene;
 
 class CSceneManager : public CSingleton<CSceneManager, SceneManagerDeleter>
 {
@@ -17,7 +18,12 @@ public:
 	void Init() override;
 	void Update() override;
 private:
-	enum class GameScene {Title, Main, Pause};
-	std::stack<GameScene> _scenes;
+	enum class SceneState :  uint8_t {Title, Main, Pause};
+	std::stack<SceneState> _targetScene;
+	std::unordered_map<SceneState, CScene*> _scenes;
 };
 
+
+class CScene
+{
+};

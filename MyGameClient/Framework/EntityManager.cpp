@@ -1,6 +1,5 @@
-#include "pch.h"
-#include "Entity.h"
-#include "Singleton.h"
+#include "../Header/pch.h"
+#include "../Pattern/Singleton.h"
 #include "EntityManager.h"
 
 void CEntityManager::Init()

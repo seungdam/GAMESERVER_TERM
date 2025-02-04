@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity.h"
+#include "../GameObject/Entity.h"
 
 class CEntityManager;
 
@@ -23,7 +23,7 @@ public:
 	void Render(sf::RenderWindow& gameWindow);
 private:
 	std::vector<std::unique_ptr<CEntity>> _gameObjs;
-	std::unordered_map<int32, CEntity*> _groupedObjs;
+	std::unordered_map<int32, CEntity*> _groupedObjs; // entityType, entity
 };
 
 template<class T, typename ...Arg>
