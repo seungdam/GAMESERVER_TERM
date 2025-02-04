@@ -1,41 +1,97 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
+    <Filter Include="Header">
+      <UniqueIdentifier>{4b96e55f-67d6-486d-973b-fa8d6524d1b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Game">
+      <UniqueIdentifier>{97bfebc3-2e67-45a4-a42d-925028cbf78f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Entity">
+      <UniqueIdentifier>{09afb3ff-e117-4569-a4eb-c197d518ce30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Framework">
+      <UniqueIdentifier>{f0d3648d-a3b9-4e78-a0b7-093eb44b42af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Framework\Pattern">
+      <UniqueIdentifier>{81349ec6-5ec6-4b0b-9eab-1b71b9226dd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Framework\Manager">
+      <UniqueIdentifier>{07e67242-ba0d-4c18-bd3d-25be843452e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Entity\Camera">
+      <UniqueIdentifier>{1c408704-7c49-4f2f-9b3b-9b929d156e35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Entity\Player">
+      <UniqueIdentifier>{83e01eb2-fc8e-4dd4-b81f-6108105094bd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Header\pch.h">
+      <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="OBJECTMGR.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Header\types.h">
+      <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Pattern\Singleton.h">
+      <Filter>Game\Framework\Pattern</Filter>
     </ClInclude>
-    <ClInclude Include="common.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="GameObject\Entity.h">
+      <Filter>Game\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\EntityManager.h">
+      <Filter>Game\Framework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\GameManager.h">
+      <Filter>Game\Framework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\InputManager.h">
+      <Filter>Game\Framework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\SceneManager.h">
+      <Filter>Game\Framework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Camera.h">
+      <Filter>Game\Entity\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\GameFramework.h">
+      <Filter>Game\Framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Header\pch.cpp">
+      <Filter>Header</Filter>
     </ClCompile>
-    <ClCompile Include="OBJECTMGR.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Pattern\Singleton.cpp">
+      <Filter>Game\Framework\Pattern</Filter>
     </ClCompile>
-    <ClCompile Include="OBJECT.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="GameObject\Entity.cpp">
+      <Filter>Game\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\EntityManager.cpp">
+      <Filter>Game\Framework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\GameManager.cpp">
+      <Filter>Game\Framework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\InputManager.cpp">
+      <Filter>Game\Framework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\SceneManager.cpp">
+      <Filter>Game\Framework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Camera.cpp">
+      <Filter>Game\Entity\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\GameFramework.cpp">
+      <Filter>Game\Framework</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
