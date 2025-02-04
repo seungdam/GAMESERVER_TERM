@@ -141,16 +141,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\protocol\protocol_2022.h" />
+    <ClInclude Include="..\protocol\protocol.h" />
     <ClInclude Include="common.h" />
-    <ClInclude Include="EXP_OVER.h" />
-    <ClInclude Include="Msession.h" />
-    <ClInclude Include="OBDC_MGR.h" />
+    <ClInclude Include="IOCP\OverEx.h" />
+    <ClInclude Include="Session\Session.h" />
+    <ClInclude Include="DB\OBDCManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Msession.cpp" />
-    <ClCompile Include="OBDC_MGR.cpp" />
+    <ClCompile Include="Session\Session.cpp" />
+    <ClCompile Include="DB\OBDCManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

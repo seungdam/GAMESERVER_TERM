@@ -1,8 +1,6 @@
 #pragma once
-#include <windows.h>  
-#include <iostream>  
 #include <sqlext.h>  
-class OBDC_MGR
+class OBDCManager
 {
     SQLHENV henv;
     SQLHDBC hdbc;
@@ -19,8 +17,8 @@ public:
     SQLINTEGER user_x;
     SQLINTEGER user_y;
     SQLWCHAR user_name[10];
-    OBDC_MGR() {};
-    ~OBDC_MGR() {};
+    OBDCManager() {};
+    ~OBDCManager() {};
     void AllocateHandles();
     void ConnectDataSource(const SQLWCHAR* obdc);
     void ExecuteStatementDirect(const SQLWCHAR* sql);
