@@ -1,6 +1,7 @@
 #include "OBJECTMGR.h"
-#include "../protocol/protocol_2022.h"
-class GAME {
+#include "../protocol/protocol.h"
+class GAME 
+{
 protected:
 	sf::RenderWindow* m_window;
 	

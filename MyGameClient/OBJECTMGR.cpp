@@ -2,7 +2,7 @@
 void OBJECTMGR::AddObject(int id, short x, short y, int max_hp, int hp, int level, int exp, const char* name) {
 	if (id < 10000) { // 플레이어라면
 		if (m_pc_objects[id] == NULL) {
-			m_pc_objects[id] = new OBJECT(id, x, y, max_hp, hp, level, exp, name, m_player_texture);
+			m_pc_objects[id] = new GameObject(id, x, y, max_hp, hp, level, exp, name, m_player_texture);
 			m_pc_objects[id]->a_move(x, y);
 			m_pc_objects[id]->set_font(m_font);
 			m_pc_objects[id]->show();
@@ -13,7 +13,7 @@ void OBJECTMGR::AddObject(int id, short x, short y, int max_hp, int hp, int leve
 	}
 	else {
 		if (m_pc_objects[id] == NULL) {
-			m_pc_objects[id] = new OBJECT(id, x, y, max_hp, hp, level, exp, name, m_npc_texture);
+			m_pc_objects[id] = new GameObject(id, x, y, max_hp, hp, level, exp, name, m_npc_texture);
 			m_pc_objects[id]->a_move(x, y);
 			std::cout << "x" << x << "y" << y << std::endl;
 			m_pc_objects[id]->set_font(m_font);
